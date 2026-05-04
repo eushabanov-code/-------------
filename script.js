@@ -34,10 +34,23 @@ const orderModal = document.getElementById('order-modal');
 const orderInputs = document.getElementById('order-inputs');
 const confirmOrderBtn = document.getElementById('confirm-order-btn');
 const cancelOrderBtn = document.getElementById('cancel-order-btn');
+const sectionToggleButtons = document.querySelectorAll('.section-toggle');
 
 // Инициализация
 document.addEventListener('DOMContentLoaded', () => {
     loadSavedGames();
+});
+
+sectionToggleButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const content = document.getElementById(button.dataset.target);
+        if (!content) return;
+
+        const isCollapsed = content.classList.toggle('collapsed');
+        content.closest('.section').classList.toggle('is-collapsed', isCollapsed);
+        button.setAttribute('aria-expanded', (!isCollapsed).toString());
+        button.textContent = isCollapsed ? 'Развернуть' : 'Свернуть';
+    });
 });
 
 // Создание игры
@@ -114,20 +127,64 @@ function updateRoundInputs() {
     roundInputs.innerHTML = '';
     players.forEach(player => {
         const div = document.createElement('div');
-        div.innerHTML = `
-            <label>${player.name}</label>
-            <input type="number" min="0" max="16" value="0" data-player="${player.name}">
-        `;
+        const label = document.createElement('label');
+        label.textContent = player.name;
+
+        const control = document.createElement('div');
+        control.className = 'score-control';
+
+        const downButton = document.createElement('button');
+        downButton.type = 'button';
+        downButton.className = 'score-step';
+        downButton.dataset.dir = 'down';
+        downButton.textContent = '−';
+        downButton.setAttribute('aria-label', `Уменьшить шары: ${player.name}`);
+
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.min = '0';
+        input.max = '16';
+        input.value = '0';
+        input.inputMode = 'numeric';
+        input.dataset.player = player.name;
+
+        const upButton = document.createElement('button');
+        upButton.type = 'button';
+        upButton.className = 'score-step';
+        upButton.dataset.dir = 'up';
+        upButton.textContent = '+';
+        upButton.setAttribute('aria-label', `Увеличить шары: ${player.name}`);
+
+        control.appendChild(downButton);
+        control.appendChild(input);
+        control.appendChild(upButton);
+        div.appendChild(label);
+        div.appendChild(control);
         roundInputs.appendChild(div);
     });
     // Добавить listeners для динамического max
     const inputs = roundInputs.querySelectorAll('input');
     inputs.forEach(input => {
         input.addEventListener('input', () => {
+            clampScoreInput(input, inputs);
             updateMax(inputs);
         });
     });
     updateMax(inputs); // Инициализировать
+}
+
+function getOtherScoresTotal(currentInput, inputs) {
+    return Array.from(inputs).reduce((sum, inp) => {
+        if (inp === currentInput) return sum;
+        return sum + (parseInt(inp.value) || 0);
+    }, 0);
+}
+
+function clampScoreInput(input, inputs) {
+    const otherScoresTotal = getOtherScoresTotal(input, inputs);
+    const maxAllowed = Math.max(0, 16 - otherScoresTotal);
+    const value = parseInt(input.value) || 0;
+    input.value = Math.min(Math.max(value, 0), maxAllowed).toString();
 }
 
 function updateMax(inputs) {
@@ -136,8 +193,33 @@ function updateMax(inputs) {
     inputs.forEach(inp => {
         const current = parseInt(inp.value) || 0;
         inp.max = current + remaining;
+        const control = inp.closest('.score-control');
+        if (!control) return;
+        const downButton = control.querySelector('[data-dir="down"]');
+        const upButton = control.querySelector('[data-dir="up"]');
+        downButton.disabled = current <= 0;
+        upButton.disabled = current >= parseInt(inp.max);
     });
 }
+
+roundInputs.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('score-step')) return;
+
+    const control = e.target.closest('.score-control');
+    const input = control.querySelector('input');
+    const inputs = roundInputs.querySelectorAll('input');
+    const current = parseInt(input.value) || 0;
+    const otherScoresTotal = getOtherScoresTotal(input, inputs);
+    const maxAllowed = Math.max(0, 16 - otherScoresTotal);
+
+    if (e.target.dataset.dir === 'up') {
+        input.value = Math.min(current + 1, maxAllowed).toString();
+    } else {
+        input.value = Math.max(current - 1, 0).toString();
+    }
+
+    updateMax(inputs);
+});
 
 // Добавление партии
 addRoundBtn.addEventListener('click', () => {
@@ -148,7 +230,7 @@ addRoundBtn.addEventListener('click', () => {
     const round = {};
     let hasInput = false;
     players.forEach(player => {
-        const input = roundInputs.querySelector(`input[data-player="${player.name}"]`);
+        const input = Array.from(roundInputs.querySelectorAll('input')).find(inp => inp.dataset.player === player.name);
         const score = parseInt(input.value) || 0;
         round[player.name] = score;
         if (score > 0) hasInput = true;

@@ -63,6 +63,43 @@ p {
     box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
 }
 
+.section-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    margin: 0;
+    text-align: left;
+}
+
+.section-toggle {
+    width: auto;
+    min-height: 40px;
+    margin: 0;
+    padding: 9px 12px;
+    border-color: rgba(218, 231, 223, 0.34);
+    background: rgba(245, 247, 246, 0.12);
+    color: rgba(245, 247, 246, 0.92);
+    font-size: 14px;
+}
+
+.section-toggle:hover,
+.section-toggle:focus-visible {
+    background: rgba(245, 247, 246, 0.18);
+}
+
+.section-content.collapsed {
+    display: none;
+}
+
+.section.is-collapsed .section-header {
+    margin-bottom: 0;
+}
+
 .hidden {
     display: none;
 }
@@ -155,6 +192,13 @@ button:focus-visible {
 button:active {
     transform: translateY(1px) scale(0.99);
     background-color: #3f9343;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+    transform: none;
+    box-shadow: none;
 }
 
 ul {
@@ -328,6 +372,28 @@ th {
     width: 100%;
 }
 
+.score-control {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+    gap: 8px;
+    align-items: center;
+}
+
+.score-control input {
+    margin: 0;
+    text-align: center;
+    font-weight: 700;
+}
+
+.score-step {
+    min-width: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0;
+    font-size: 22px;
+    line-height: 1;
+}
+
 .modal {
     position: fixed;
     inset: 0;
@@ -414,6 +480,22 @@ th {
         border-radius: 12px;
     }
 
+    .section-header {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .section-header h2 {
+        text-align: center;
+    }
+
+    .section-toggle {
+        width: 100%;
+        min-height: 44px;
+        font-size: 16px;
+    }
+
     input, button {
         min-height: 48px;
         font-size: 16px;
@@ -442,6 +524,16 @@ th {
 
     #round-inputs > div {
         min-width: 0;
+    }
+
+    .score-control {
+        grid-template-columns: 52px minmax(0, 1fr) 52px;
+        gap: 10px;
+    }
+
+    .score-step {
+        min-height: 48px;
+        font-size: 24px;
     }
 
     #players-list li,
