@@ -237,6 +237,30 @@ li {
     margin: 0;
 }
 
+.game-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.game-actions button {
+    margin: 0;
+}
+
+#new-game-btn {
+    background-color: #7c4a59;
+}
+
+#new-game-btn:hover,
+#new-game-btn:focus-visible {
+    background-color: #6d3f4e;
+    box-shadow: 0 0 0 3px rgba(184, 79, 99, 0.2);
+}
+
+#new-game-btn:active {
+    background-color: #603544;
+}
+
 .saved-game-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(92px, auto));
@@ -544,6 +568,11 @@ th {
 
     .saved-game-actions {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .game-actions {
+        grid-template-columns: 1fr;
+        gap: 12px;
     }
 
     #players-list li {

@@ -29,6 +29,7 @@ const resultsBody = document.getElementById('results-body');
 const resultsGameTitle = document.getElementById('results-game-title');
 
 const saveGameBtn = document.getElementById('save-game-btn');
+const newGameBtn = document.getElementById('new-game-btn');
 const savedGamesList = document.getElementById('saved-games-list');
 const orderModal = document.getElementById('order-modal');
 const orderInputs = document.getElementById('order-inputs');
@@ -416,11 +417,10 @@ function updateTable() {
     });
 }
 
-// Сохранение игры
-saveGameBtn.addEventListener('click', () => {
+function saveCurrentGame() {
     if (!gameName || players.length === 0) {
         alert('Создайте игру и добавьте игроков');
-        return;
+        return false;
     }
     const game = {
         name: gameName,
@@ -433,6 +433,60 @@ saveGameBtn.addEventListener('click', () => {
     localStorage.setItem('kolhoz_games', JSON.stringify(savedGames));
     alert('Игра сохранена');
     loadSavedGames();
+    return true;
+}
+
+function resetToNewGameSetup() {
+    players = [];
+    rounds = [];
+    gameName = '';
+    gameDate = '';
+    pendingRoundScores = null;
+
+    gameNameInput.value = '';
+    gameDateInput.value = '';
+    playerNameInput.value = '';
+    playersList.innerHTML = '';
+    roundInputs.innerHTML = '';
+    resultsBody.innerHTML = '';
+    resultsGameTitle.textContent = '';
+    resultsTable.querySelector('thead').innerHTML = `
+        <tr id="header-row">
+            <th>Игрок</th>
+            <th>Итого</th>
+        </tr>
+    `;
+    closeOrderModal();
+
+    document.querySelectorAll('.section-content.collapsed').forEach(content => {
+        content.classList.remove('collapsed');
+        content.closest('.section').classList.remove('is-collapsed');
+    });
+    sectionToggleButtons.forEach(button => {
+        button.setAttribute('aria-expanded', 'true');
+        button.textContent = 'Свернуть';
+    });
+
+    gameSetup.classList.remove('hidden');
+    savedGamesSection.classList.remove('hidden');
+    playersSection.classList.add('hidden');
+    roundSection.classList.add('hidden');
+    resultsSection.classList.add('hidden');
+    saveSection.classList.add('hidden');
+    loadSavedGames();
+}
+
+// Сохранение игры
+saveGameBtn.addEventListener('click', () => {
+    saveCurrentGame();
+});
+
+newGameBtn.addEventListener('click', () => {
+    const shouldSave = confirm('Сохранить текущую игру перед созданием новой?');
+    if (shouldSave && !saveCurrentGame()) {
+        return;
+    }
+    resetToNewGameSetup();
 });
 
 // Загрузка списка сохранённых игр
