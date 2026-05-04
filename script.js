@@ -372,17 +372,26 @@ function updateTable() {
         player.total = roundTotals.reduce((sum, rt) => sum + (rt[player.name] || 0), 0);
     });
 
+    const highestTotal = players.length > 0 ? Math.max(...players.map(player => player.total)) : 0;
+    const hasLeader = rounds.length > 0;
+
     // Заголовки: первая строка показывает общий итог, вторая - названия колонок.
     const tableHead = resultsTable.querySelector('thead');
     const totalsHtml = players
         .map(player => {
             const total = formatTotal(player.total);
             const totalClass = player.total > 0 ? 'positive' : player.total < 0 ? 'negative' : '';
-            return `<th class="total-cell ${totalClass}">${total}</th>`;
+            const leaderClass = hasLeader && player.total === highestTotal ? 'leader-total' : '';
+            return `<th class="total-cell ${totalClass} ${leaderClass}">${total}</th>`;
         })
         .join('');
     const namesHtml = players
-        .map(player => `<th>${player.name}</th>`)
+        .map(player => {
+            const isLeader = hasLeader && player.total === highestTotal;
+            const crownHtml = isLeader ? '<span class="leader-crown" aria-label="1 место">♛</span>' : '';
+            const leaderClass = isLeader ? 'leader-name' : '';
+            return `<th class="${leaderClass}"><span class="player-name">${player.name}</span>${crownHtml}</th>`;
+        })
         .join('');
     tableHead.innerHTML = `
         <tr class="summary-row">

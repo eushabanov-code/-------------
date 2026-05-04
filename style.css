@@ -345,6 +345,28 @@ th {
     color: #ffb0a7;
 }
 
+.leader-name {
+    color: #f2c75c;
+    font-weight: 800;
+}
+
+.leader-total {
+    color: #f2c75c;
+}
+
+.player-name {
+    vertical-align: middle;
+}
+
+.leader-crown {
+    display: inline-block;
+    margin-left: 4px;
+    color: #f2c75c;
+    font-size: 0.82em;
+    line-height: 1;
+    vertical-align: 0.08em;
+}
+
 #results-body td:first-child {
     font-weight: 700;
 }
