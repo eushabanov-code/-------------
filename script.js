@@ -352,7 +352,13 @@ function loadSavedGames() {
     savedGamesList.innerHTML = '';
     savedGames.forEach((game, index) => {
         const li = document.createElement('li');
-        li.innerHTML = `${game.name} (${game.date}) <button data-index="${index}">Открыть</button>`;
+        li.innerHTML = `
+            <span>${game.name} (${game.date})</span>
+            <div class="saved-game-actions">
+                <button data-index="${index}" data-action="open">Открыть</button>
+                <button data-index="${index}" data-action="delete" class="delete-game-btn" type="button">Удалить</button>
+            </div>
+        `;
         savedGamesList.appendChild(li);
     });
 }
@@ -361,8 +367,22 @@ function loadSavedGames() {
 savedGamesList.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
         const index = e.target.dataset.index;
+        const action = e.target.dataset.action;
         const savedGames = JSON.parse(localStorage.getItem('kolhoz_games') || '[]');
+
+        if (action === 'delete') {
+            const game = savedGames[index];
+            if (!game) return;
+            const shouldDelete = confirm(`Удалить сохранённую игру "${game.name}"?`);
+            if (!shouldDelete) return;
+            savedGames.splice(index, 1);
+            localStorage.setItem('kolhoz_games', JSON.stringify(savedGames));
+            loadSavedGames();
+            return;
+        }
+
         const game = savedGames[index];
+        if (!game) return;
         loadGame(game);
     }
 });

@@ -17,7 +17,10 @@
         <div id="game-setup" class="section">
             <h2>Создать новую игру</h2>
             <input type="text" id="game-name" placeholder="Название игры" required>
-            <input type="date" id="game-date" required>
+            <div class="date-field">
+                <input type="date" id="game-date" required aria-label="Выбери дату">
+                <span>Выбери дату</span>
+            </div>
             <button id="create-game-btn">Создать игру</button>
         </div>
 

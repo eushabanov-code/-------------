@@ -90,6 +90,42 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(148, 230, 154, 0.2);
 }
 
+.date-field {
+    position: relative;
+    width: 100%;
+    margin: 12px 0;
+}
+
+.date-field input {
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+#game-date:invalid {
+    color: transparent;
+}
+
+#game-date:focus,
+#game-date:valid {
+    color: #1b2b21;
+}
+
+.date-field span {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(27, 43, 33, 0.58);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.date-field input:focus + span,
+.date-field input:valid + span {
+    display: none;
+}
+
 select {
     min-height: 44px;
     padding: 10px;
@@ -148,13 +184,33 @@ li {
 
 #saved-games-list li {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(120px, auto);
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 10px;
     align-items: center;
 }
 
 #saved-games-list li button {
     margin: 0;
+}
+
+.saved-game-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(92px, auto));
+    gap: 8px;
+}
+
+.delete-game-btn {
+    background-color: #9f3f3f;
+}
+
+.delete-game-btn:hover,
+.delete-game-btn:focus-visible {
+    background-color: #8d3636;
+    box-shadow: 0 0 0 3px rgba(255, 176, 167, 0.18);
+}
+
+.delete-game-btn:active {
+    background-color: #7d3030;
 }
 
 table {
@@ -360,6 +416,15 @@ th {
         margin-bottom: 0;
     }
 
+    .date-field {
+        margin: 12px 0;
+    }
+
+    .date-field input {
+        min-height: 48px;
+        padding: 13px 14px;
+    }
+
     #round-inputs {
         display: grid;
         grid-template-columns: 1fr;
@@ -376,23 +441,62 @@ th {
         gap: 8px;
     }
 
+    .saved-game-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+
     #players-list li {
         grid-template-columns: minmax(0, 1fr) 52px 52px;
     }
 
+    #results-section {
+        overflow-x: hidden;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
     table {
-        min-width: 560px;
-        font-size: 15px;
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        font-size: 12px;
     }
 
     th,
     td {
-        padding: 10px 9px;
+        padding: 7px 3px;
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.15;
+    }
+
+    #results-table th:first-child,
+    #results-table td:first-child {
+        position: static;
+        width: 38px;
+        box-shadow: none;
+    }
+
+    .summary-row th {
+        font-size: 13px;
+    }
+
+    .summary-row th:first-child {
+        font-size: 11px;
     }
 
     .score-cell {
-        min-width: 66px;
-        height: 44px;
+        min-width: 0;
+        height: 34px;
+        padding: 6px 13px 6px 3px;
+    }
+
+    .order-badge {
+        top: 3px;
+        right: 3px;
+        min-width: 13px;
+        padding: 1px 3px;
+        font-size: 9px;
     }
 
     .modal {
