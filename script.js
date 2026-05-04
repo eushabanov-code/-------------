@@ -26,6 +26,7 @@ const addRoundBtn = document.getElementById('add-round-btn');
 
 const resultsTable = document.getElementById('results-table');
 const resultsBody = document.getElementById('results-body');
+const resultsGameTitle = document.getElementById('results-game-title');
 
 const saveGameBtn = document.getElementById('save-game-btn');
 const savedGamesList = document.getElementById('saved-games-list');
@@ -259,8 +260,14 @@ function formatTotal(total) {
     return total > 0 ? `+${total}` : total.toString();
 }
 
+function updateResultsTitle() {
+    resultsGameTitle.textContent = gameName;
+}
+
 // Обновление таблицы результатов
 function updateTable() {
+    updateResultsTitle();
+
     // Рассчитать итоги по раундам
     let roundTotals = [];
     rounds.forEach(round => {

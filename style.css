@@ -237,6 +237,15 @@ th {
     scrollbar-color: rgba(245, 247, 246, 0.42) rgba(245, 247, 246, 0.08);
 }
 
+.results-game-title {
+    margin: -6px 0 14px;
+    color: #b84f63;
+    font-size: clamp(18px, 3.6vw, 22px);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+}
+
 #results-table th:first-child,
 #results-table td:first-child {
     position: sticky;
