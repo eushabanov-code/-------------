@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Счётчик очков в Колхозе</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Счётчик очков в Колхозе</h1>
+
+        <!-- Экран создания игры -->
+        <div id="game-setup" class="section">
+            <h2>Создать новую игру</h2>
+            <input type="text" id="game-name" placeholder="Название игры" required>
+            <input type="date" id="game-date" required>
+            <button id="create-game-btn">Создать игру</button>
+        </div>
+
+        <!-- Блок игроков -->
+        <div id="players-section" class="section hidden">
+            <h2>Игроки</h2>
+            <div class="add-player">
+                <input type="text" id="player-name" placeholder="Имя игрока">
+                <button id="add-player-btn">Добавить игрока</button>
+            </div>
+            <ul id="players-list"></ul>
+        </div>
+
+        <!-- Блок партии -->
+        <div id="round-section" class="section hidden">
+            <h2>Новая партия</h2>
+            <p>Итог считается как разница между игроком и следующим игроком по очереди</p>
+            <div id="round-inputs"></div>
+            <button id="add-round-btn">Добавить партию</button>
+        </div>
+
+        <!-- Таблица результатов -->
+        <div id="results-section" class="section hidden">
+            <h2>Результаты</h2>
+            <table id="results-table">
+                <thead>
+                    <tr id="header-row">
+                        <th>Игрок</th>
+                        <th>Итого</th>
+                    </tr>
+                </thead>
+                <tbody id="results-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Сохранение -->
+        <div id="save-section" class="section hidden">
+            <button id="save-game-btn">Сохранить игру</button>
+        </div>
+
+        <!-- Список сохранённых игр -->
+        <div id="saved-games-section" class="section">
+            <h2>Сохранённые игры</h2>
+            <ul id="saved-games-list"></ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
